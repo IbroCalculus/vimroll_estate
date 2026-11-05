@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -6,6 +6,7 @@ import { CheckCircle2, Clock, Mail, MapPin, Phone } from 'lucide-react';
 import { PageMeta } from '../components/common/PageMeta';
 import { Container } from '../components/common/Container';
 import { Button } from '../components/common/Button';
+import { LuxurySelect } from '../components/common/LuxurySelect';
 import { PageTransition } from '../components/animations/PageTransition';
 import { useAllPropertiesQuery } from '../features/properties/useProperties';
 import { submitDemoEnquiry } from '../services/api';
@@ -21,6 +22,12 @@ const contactFormSchema = z.object({
     .trim()
     .min(12, 'Please share a brief message (at least 12 characters).'),
 });
+
+const CONTACT_METHOD_OPTIONS = [
+  { label: 'Email', value: 'Email' },
+  { label: 'Telephone Call', value: 'Telephone' },
+  { label: 'Private WhatsApp', value: 'WhatsApp' },
+];
 
 const OFFICES = [
   {
@@ -56,6 +63,8 @@ export default function Contact() {
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     reset,
     formState: { errors, isSubmitting },
   } = useForm({
@@ -69,6 +78,27 @@ export default function Contact() {
       message: '',
     },
   });
+
+  const preferredContact = watch('preferredContact');
+  const propertyOfInterest = watch('propertyOfInterest');
+
+  const propertyOptions = useMemo(
+    () => [
+      {
+        label: 'General Private Advisory / Bespoke Search',
+        value: 'General Private Advisory',
+      },
+      {
+        label: 'List a Residence With VIMROLL Estate',
+        value: 'List a Property With VIMROLL',
+      },
+      ...properties.map((prop) => {
+        const val = `${prop.reference} — ${prop.title} (${prop.location.city})`;
+        return { label: val, value: val };
+      }),
+    ],
+    [properties]
+  );
 
   const onSubmit = async (values) => {
     const result = await submitDemoEnquiry(values);
@@ -100,9 +130,9 @@ export default function Contact() {
       </section>
 
       {/* Main Content */}
-      <section className="py-16 sm:py-24">
+      <section className="py-14 sm:py-24">
         <Container>
-          <div className="grid grid-cols-1 gap-14 lg:grid-cols-12">
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-14">
             {/* Left: Office Directory */}
             <div className="space-y-8 lg:col-span-5">
               <div>
@@ -174,7 +204,7 @@ export default function Contact() {
 
             {/* Right: Enquiry Form */}
             <div className="lg:col-span-7">
-              <div className="border border-[#E8E1D5] bg-white p-7 sm:p-10">
+              <div className="border border-[#E8E1D5] bg-white p-6 sm:p-10">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#B69A69]">
                   Direct Enquiry
                 </p>
@@ -245,7 +275,7 @@ export default function Contact() {
                           placeholder="Enter your full name"
                           aria-invalid={Boolean(errors.name)}
                           {...register('name')}
-                          className="w-full border border-[#E8E1D5] bg-[#F7F5F0]/50 px-4 py-3 text-sm text-[#171816] focus:border-[#B69A69] focus:bg-white focus:outline-none"
+                          className="min-h-[44px] w-full border border-[#E8E1D5] bg-[#F7F5F0]/50 px-4 py-3 text-sm text-[#171816] focus:border-[#B69A69] focus:bg-white focus:outline-none"
                         />
                         {errors.name && (
                           <p role="alert" className="mt-1.5 text-xs text-red-700">
@@ -267,7 +297,7 @@ export default function Contact() {
                           placeholder="name@domain.com"
                           aria-invalid={Boolean(errors.email)}
                           {...register('email')}
-                          className="w-full border border-[#E8E1D5] bg-[#F7F5F0]/50 px-4 py-3 text-sm text-[#171816] focus:border-[#B69A69] focus:bg-white focus:outline-none"
+                          className="min-h-[44px] w-full border border-[#E8E1D5] bg-[#F7F5F0]/50 px-4 py-3 text-sm text-[#171816] focus:border-[#B69A69] focus:bg-white focus:outline-none"
                         />
                         {errors.email && (
                           <p role="alert" className="mt-1.5 text-xs text-red-700">
@@ -290,57 +320,28 @@ export default function Contact() {
                           type="tel"
                           placeholder="+44 20 7946 0000"
                           {...register('phone')}
-                          className="w-full border border-[#E8E1D5] bg-[#F7F5F0]/50 px-4 py-3 text-sm text-[#171816] focus:border-[#B69A69] focus:bg-white focus:outline-none"
+                          className="min-h-[44px] w-full border border-[#E8E1D5] bg-[#F7F5F0]/50 px-4 py-3 text-sm text-[#171816] focus:border-[#B69A69] focus:bg-white focus:outline-none"
                         />
                       </div>
 
-                      <div>
-                        <label
-                          htmlFor="contact-method"
-                          className="mb-1.5 block text-[10px] font-semibold uppercase tracking-[0.2em] text-[#41413D]"
-                        >
-                          Preferred Contact Method
-                        </label>
-                        <select
-                          id="contact-method"
-                          {...register('preferredContact')}
-                          className="w-full border border-[#E8E1D5] bg-[#F7F5F0]/50 px-4 py-3 text-sm text-[#171816] focus:border-[#B69A69] focus:bg-white focus:outline-none"
-                        >
-                          <option value="Email">Email</option>
-                          <option value="Telephone">Telephone Call</option>
-                          <option value="WhatsApp">Private WhatsApp</option>
-                        </select>
-                      </div>
+                      <LuxurySelect
+                        label="Preferred Contact Method"
+                        value={preferredContact}
+                        onChange={(val) =>
+                          setValue('preferredContact', val, { shouldValidate: true })
+                        }
+                        options={CONTACT_METHOD_OPTIONS}
+                      />
                     </div>
 
-                    <div>
-                      <label
-                        htmlFor="contact-property"
-                        className="mb-1.5 block text-[10px] font-semibold uppercase tracking-[0.2em] text-[#41413D]"
-                      >
-                        Property of Interest
-                      </label>
-                      <select
-                        id="contact-property"
-                        {...register('propertyOfInterest')}
-                        className="w-full border border-[#E8E1D5] bg-[#F7F5F0]/50 px-4 py-3 text-sm text-[#171816] focus:border-[#B69A69] focus:bg-white focus:outline-none"
-                      >
-                        <option value="General Private Advisory">
-                          General Private Advisory / Bespoke Search
-                        </option>
-                        <option value="List a Property With VIMROLL">
-                          List a Residence With VIMROLL Estate
-                        </option>
-                        {properties.map((prop) => (
-                          <option
-                            key={prop.id}
-                            value={`${prop.reference} — ${prop.title} (${prop.location.city})`}
-                          >
-                            {prop.reference} — {prop.title} ({prop.location.city})
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                    <LuxurySelect
+                      label="Property of Interest"
+                      value={propertyOfInterest}
+                      onChange={(val) =>
+                        setValue('propertyOfInterest', val, { shouldValidate: true })
+                      }
+                      options={propertyOptions}
+                    />
 
                     <div>
                       <label
@@ -383,4 +384,3 @@ export default function Contact() {
     </PageTransition>
   );
 }
-

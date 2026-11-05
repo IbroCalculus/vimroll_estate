@@ -1,43 +1,94 @@
 /**
- * Currency, measurement, and URL filter utilities for VIMROLL Estate.
+ * Multi-currency, measurement unit, and URL filter utilities for VIMROLL Estate.
  */
 
-export function formatPrice(amount, currency = 'USD', compact = false) {
-  if (typeof amount !== 'number' || Number.isNaN(amount)) return 'Price Upon Request';
+export const CURRENCIES = {
+  USD: { code: 'USD', symbol: '$', rate: 1, label: 'USD ($)' },
+  GBP: { code: 'GBP', symbol: '£', rate: 0.79, label: 'GBP (£)' },
+  EUR: { code: 'EUR', symbol: '€', rate: 0.92, label: 'EUR (€)' },
+  AED: { code: 'AED', symbol: 'AED ', rate: 3.6725, label: 'AED' },
+  NGN: { code: 'NGN', symbol: '₦', rate: 1580, label: 'NGN (₦)' },
+};
+
+export const CURRENCY_LIST = Object.values(CURRENCIES);
+
+export function convertFromUsd(usdAmount, currencyCode = 'USD') {
+  const meta = CURRENCIES[currencyCode] || CURRENCIES.USD;
+  return usdAmount * meta.rate;
+}
+
+export function formatPrice(usdAmount, currencyCode = 'USD', compact = false) {
+  if (typeof usdAmount !== 'number' || Number.isNaN(usdAmount)) {
+    return 'Price Upon Request';
+  }
+
+  const meta = CURRENCIES[currencyCode] || CURRENCIES.USD;
+  const converted = usdAmount * meta.rate;
 
   if (compact) {
-    if (amount >= 1_000_000) {
-      const millions = amount / 1_000_000;
-      const formatted = millions % 1 === 0 ? millions.toFixed(0) : millions.toFixed(1);
-      return `$${formatted}M`;
+    if (converted >= 1_000_000_000) {
+      const billions = converted / 1_000_000_000;
+      const num = billions >= 10 ? billions.toFixed(0) : billions.toFixed(1);
+      return `${meta.symbol}${num.replace(/\.0$/, '')}B`;
     }
-    if (amount >= 1_000) {
-      return `$${Math.round(amount / 1_000)}K`;
+    if (converted >= 1_000_000) {
+      const millions = converted / 1_000_000;
+      const num = millions >= 100 ? millions.toFixed(0) : millions.toFixed(1);
+      return `${meta.symbol}${num.replace(/\.0$/, '')}M`;
     }
+    if (converted >= 1_000) {
+      return `${meta.symbol}${Math.round(converted / 1_000)}K`;
+    }
+  }
+
+  if (currencyCode === 'NGN') {
+    return `₦${new Intl.NumberFormat('en-US', {
+      maximumFractionDigits: 0,
+    }).format(Math.round(converted))}`;
+  }
+
+  if (currencyCode === 'AED') {
+    return `AED ${new Intl.NumberFormat('en-US', {
+      maximumFractionDigits: 0,
+    }).format(Math.round(converted))}`;
   }
 
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency,
+    currency: meta.code,
     maximumFractionDigits: 0,
-  }).format(amount);
+  }).format(Math.round(converted));
 }
 
-export function formatArea(area, unit = 'sqm', includeSqft = false) {
-  if (!area) return '—';
-  const formattedMetric = new Intl.NumberFormat('en-US').format(area);
-  if (!includeSqft || unit !== 'sqm') {
-    return `${formattedMetric} ${unit}`;
-  }
-  const sqft = Math.round(area * 10.7639);
+export function formatArea(sqmArea, displayUnit = 'sqm', includeSecondary = false) {
+  if (!sqmArea) return '—';
+  const sqft = Math.round(sqmArea * 10.7639);
+  const formattedSqm = new Intl.NumberFormat('en-US').format(sqmArea);
   const formattedSqft = new Intl.NumberFormat('en-US').format(sqft);
-  return `${formattedMetric} sqm (${formattedSqft} sq ft)`;
+
+  if (displayUnit === 'sqft') {
+    return includeSecondary
+      ? `${formattedSqft} sq ft (${formattedSqm} sqm)`
+      : `${formattedSqft} sq ft`;
+  }
+
+  return includeSecondary
+    ? `${formattedSqm} sqm (${formattedSqft} sq ft)`
+    : `${formattedSqm} sqm`;
 }
 
-export function formatPricePerSqm(price, area) {
-  if (!price || !area) return '—';
-  const ratio = Math.round(price / area);
-  return `${formatPrice(ratio)} / sqm`;
+export function formatPricePerSqm(
+  usdPrice,
+  sqmArea,
+  currencyCode = 'USD',
+  displayUnit = 'sqm'
+) {
+  if (!usdPrice || !sqmArea) return '—';
+  const effectiveArea =
+    displayUnit === 'sqft' ? sqmArea * 10.7639 : sqmArea;
+  const usdPerUnit = usdPrice / effectiveArea;
+  const unitLabel = displayUnit === 'sqft' ? 'sq ft' : 'sqm';
+  return `${formatPrice(usdPerUnit, currencyCode)} / ${unitLabel}`;
 }
 
 export const DEFAULT_FILTERS = {
@@ -78,4 +129,3 @@ export function buildSearchParamsFromFilters(filters) {
   });
   return params;
 }
-

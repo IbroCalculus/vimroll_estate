@@ -3,11 +3,14 @@ import { useLocation } from 'react-router-dom';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { CompareTray } from './CompareTray';
+import { CommandSearch } from './CommandSearch';
+import { ToastViewport } from '../common/ToastViewport';
 import { usePropertyStore } from '../../store/usePropertyStore';
 
 export function PageLayout({ children }) {
   const { pathname } = useLocation();
   const hasCompareTray = usePropertyStore((state) => state.compareIds.length > 0);
+  const isPropertyDetail = pathname.startsWith('/properties/') && pathname !== '/properties';
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
@@ -16,7 +19,7 @@ export function PageLayout({ children }) {
   return (
     <div
       className={`flex min-h-screen flex-col overflow-x-clip bg-[#F7F5F0] text-[#41413D] ${
-        hasCompareTray ? 'pb-16' : ''
+        hasCompareTray ? 'pb-16' : isPropertyDetail ? 'pb-20 lg:pb-0' : ''
       }`}
     >
       <a
@@ -31,6 +34,8 @@ export function PageLayout({ children }) {
       </main>
       <Footer />
       <CompareTray />
+      <CommandSearch />
+      <ToastViewport />
     </div>
   );
 }

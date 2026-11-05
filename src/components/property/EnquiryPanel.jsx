@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { Calendar, CheckCircle2, Mail, Phone } from 'lucide-react';
 import { Button } from '../common/Button';
 import { LuxuryImage } from '../common/LuxuryImage';
+import { LuxurySelect } from '../common/LuxurySelect';
 import { submitDemoEnquiry } from '../../services/api';
 
 const enquirySchema = z.object({
@@ -19,6 +20,12 @@ const enquirySchema = z.object({
     .trim()
     .min(10, 'Please include a brief note (at least 10 characters).'),
 });
+
+const CONTACT_METHOD_OPTIONS = [
+  { label: 'Email', value: 'Email' },
+  { label: 'Telephone', value: 'Telephone' },
+  { label: 'WhatsApp', value: 'WhatsApp' },
+];
 
 export function EnquiryPanel({ property }) {
   const [confirmation, setConfirmation] = useState(null);
@@ -45,6 +52,7 @@ export function EnquiryPanel({ property }) {
   });
 
   const requestViewing = watch('requestViewing');
+  const preferredContact = watch('preferredContact');
 
   const onSubmit = async (values) => {
     const response = await submitDemoEnquiry({
@@ -81,14 +89,14 @@ export function EnquiryPanel({ property }) {
         <div className="grid grid-cols-2 gap-2.5 border-b border-[#E8E1D5] py-4 text-xs">
           <a
             href={`tel:${consultant.phone.replace(/\s+/g, '')}`}
-            className="flex items-center justify-center gap-1.5 border border-[#E8E1D5] py-2.5 font-medium text-[#171816] transition-colors hover:border-[#171816]"
+            className="flex min-h-[44px] items-center justify-center gap-1.5 border border-[#E8E1D5] py-2.5 font-medium text-[#171816] transition-colors hover:border-[#171816]"
           >
             <Phone className="h-3.5 w-3.5 text-[#B69A69]" strokeWidth={1.5} />
             <span>Call Desk</span>
           </a>
           <a
             href={`mailto:${consultant.email}?subject=Enquiry:%20${encodeURIComponent(property.reference)}`}
-            className="flex items-center justify-center gap-1.5 border border-[#E8E1D5] py-2.5 font-medium text-[#171816] transition-colors hover:border-[#171816]"
+            className="flex min-h-[44px] items-center justify-center gap-1.5 border border-[#E8E1D5] py-2.5 font-medium text-[#171816] transition-colors hover:border-[#171816]"
           >
             <Mail className="h-3.5 w-3.5 text-[#B69A69]" strokeWidth={1.5} />
             <span>Direct Email</span>
@@ -101,7 +109,7 @@ export function EnquiryPanel({ property }) {
         <button
           type="button"
           onClick={() => setValue('requestViewing', false)}
-          className={`flex-1 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] transition-colors ${
+          className={`flex min-h-[40px] flex-1 items-center justify-center py-2 text-[11px] font-semibold uppercase tracking-[0.16em] transition-colors ${
             !requestViewing
               ? 'bg-[#171816] text-[#F7F5F0]'
               : 'text-[#41413D] hover:text-[#171816]'
@@ -112,7 +120,7 @@ export function EnquiryPanel({ property }) {
         <button
           type="button"
           onClick={() => setValue('requestViewing', true)}
-          className={`flex-1 inline-flex items-center justify-center gap-1.5 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] transition-colors ${
+          className={`inline-flex min-h-[40px] flex-1 items-center justify-center gap-1.5 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] transition-colors ${
             requestViewing
               ? 'bg-[#171816] text-[#F7F5F0]'
               : 'text-[#41413D] hover:text-[#171816]'
@@ -155,21 +163,21 @@ export function EnquiryPanel({ property }) {
       ) : (
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="mt-6 space-y-4">
           <div>
-            <label className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.2em] text-[#41413D]">
+            <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-[0.2em] text-[#41413D]">
               Property Reference
             </label>
             <input
               type="text"
               readOnly
               value={`${property.reference} — ${property.title}`}
-              className="w-full border border-[#E8E1D5] bg-[#F7F5F0] px-3.5 py-2.5 text-xs font-medium text-[#41413D]"
+              className="min-h-[44px] w-full border border-[#E8E1D5] bg-[#F7F5F0] px-3.5 py-2.5 text-xs font-medium text-[#41413D]"
             />
           </div>
 
           <div>
             <label
               htmlFor="enq-name"
-              className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.2em] text-[#41413D]"
+              className="mb-1.5 block text-[10px] font-semibold uppercase tracking-[0.2em] text-[#41413D]"
             >
               Full Name *
             </label>
@@ -179,7 +187,7 @@ export function EnquiryPanel({ property }) {
               placeholder="Your full name"
               aria-invalid={Boolean(errors.name)}
               {...register('name')}
-              className="w-full border border-[#E8E1D5] bg-white px-3.5 py-2.5 text-sm text-[#171816] focus:border-[#B69A69] focus:outline-none"
+              className="min-h-[44px] w-full border border-[#E8E1D5] bg-white px-3.5 py-2.5 text-sm text-[#171816] focus:border-[#B69A69] focus:outline-none"
             />
             {errors.name && (
               <p role="alert" className="mt-1 text-xs text-red-700">
@@ -191,7 +199,7 @@ export function EnquiryPanel({ property }) {
           <div>
             <label
               htmlFor="enq-email"
-              className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.2em] text-[#41413D]"
+              className="mb-1.5 block text-[10px] font-semibold uppercase tracking-[0.2em] text-[#41413D]"
             >
               Email Address *
             </label>
@@ -201,7 +209,7 @@ export function EnquiryPanel({ property }) {
               placeholder="name@domain.com"
               aria-invalid={Boolean(errors.email)}
               {...register('email')}
-              className="w-full border border-[#E8E1D5] bg-white px-3.5 py-2.5 text-sm text-[#171816] focus:border-[#B69A69] focus:outline-none"
+              className="min-h-[44px] w-full border border-[#E8E1D5] bg-white px-3.5 py-2.5 text-sm text-[#171816] focus:border-[#B69A69] focus:outline-none"
             />
             {errors.email && (
               <p role="alert" className="mt-1 text-xs text-red-700">
@@ -214,7 +222,7 @@ export function EnquiryPanel({ property }) {
             <div>
               <label
                 htmlFor="enq-phone"
-                className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.2em] text-[#41413D]"
+                className="mb-1.5 block text-[10px] font-semibold uppercase tracking-[0.2em] text-[#41413D]"
               >
                 Phone (Optional)
               </label>
@@ -223,34 +231,25 @@ export function EnquiryPanel({ property }) {
                 type="tel"
                 placeholder="+44 20 ..."
                 {...register('phone')}
-                className="w-full border border-[#E8E1D5] bg-white px-3.5 py-2.5 text-sm text-[#171816] focus:border-[#B69A69] focus:outline-none"
+                className="min-h-[44px] w-full border border-[#E8E1D5] bg-white px-3.5 py-2.5 text-sm text-[#171816] focus:border-[#B69A69] focus:outline-none"
               />
             </div>
 
-            <div>
-              <label
-                htmlFor="enq-method"
-                className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.2em] text-[#41413D]"
-              >
-                Preferred Contact
-              </label>
-              <select
-                id="enq-method"
-                {...register('preferredContact')}
-                className="w-full border border-[#E8E1D5] bg-white px-3 py-2.5 text-sm text-[#171816] focus:border-[#B69A69] focus:outline-none"
-              >
-                <option value="Email">Email</option>
-                <option value="Telephone">Telephone</option>
-                <option value="WhatsApp">WhatsApp</option>
-              </select>
-            </div>
+            <LuxurySelect
+              label="Preferred Contact"
+              value={preferredContact}
+              onChange={(val) =>
+                setValue('preferredContact', val, { shouldValidate: true })
+              }
+              options={CONTACT_METHOD_OPTIONS}
+            />
           </div>
 
           {requestViewing && (
             <div>
               <label
                 htmlFor="enq-date"
-                className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.2em] text-[#41413D]"
+                className="mb-1.5 block text-[10px] font-semibold uppercase tracking-[0.2em] text-[#41413D]"
               >
                 Preferred Viewing Date
               </label>
@@ -258,7 +257,7 @@ export function EnquiryPanel({ property }) {
                 id="enq-date"
                 type="date"
                 {...register('preferredDate')}
-                className="w-full border border-[#E8E1D5] bg-white px-3.5 py-2.5 text-sm text-[#171816] focus:border-[#B69A69] focus:outline-none"
+                className="min-h-[44px] w-full border border-[#E8E1D5] bg-white px-3.5 py-2.5 text-sm text-[#171816] focus:border-[#B69A69] focus:outline-none"
               />
             </div>
           )}
@@ -266,7 +265,7 @@ export function EnquiryPanel({ property }) {
           <div>
             <label
               htmlFor="enq-message"
-              className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.2em] text-[#41413D]"
+              className="mb-1.5 block text-[10px] font-semibold uppercase tracking-[0.2em] text-[#41413D]"
             >
               Message *
             </label>
@@ -301,4 +300,3 @@ export function EnquiryPanel({ property }) {
     </aside>
   );
 }
-

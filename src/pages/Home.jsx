@@ -106,7 +106,7 @@ export default function Home() {
       {/* 5.2 HERO SECTION */}
       <section
         ref={heroSectionRef}
-        className="relative flex min-h-[94vh] flex-col justify-between overflow-hidden bg-[#171816] pt-32 pb-10 text-[#F7F5F0] sm:pt-40 sm:pb-14"
+        className="relative flex min-h-[100svh] flex-col justify-between bg-[#171816] pt-28 pb-8 text-[#F7F5F0] sm:pt-36 sm:pb-12"
       >
         {/* Background Architectural Photograph */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -118,29 +118,29 @@ export default function Home() {
               className="h-full w-full object-cover"
             />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-b from-[#171816]/70 via-[#171816]/45 to-[#171816]/90" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#171816]/75 via-[#171816]/42 to-[#171816]/92" />
         </div>
 
         {/* Hero Copy */}
-        <Container className="relative z-10 my-auto py-10 sm:py-14">
+        <Container className="relative z-10 my-auto py-8 sm:py-12">
           <div className="max-w-3xl">
-            <p className="vimroll-hero-stagger text-[11px] font-semibold uppercase tracking-[0.3em] text-[#B69A69]">
+            <p className="vimroll-hero-stagger text-[10.5px] sm:text-[11px] font-semibold uppercase tracking-[0.28em] text-[#B69A69]">
               EXCEPTIONAL PROPERTIES. EXTRAORDINARY LIVING.
             </p>
-            <h1 className="vimroll-hero-stagger mt-5 font-serif text-4xl font-normal leading-[1.05] text-[#F7F5F0] sm:text-6xl lg:text-[4.5rem]">
+            <h1 className="vimroll-hero-stagger mt-4 sm:mt-5 font-serif text-4xl font-normal leading-[1.06] text-[#F7F5F0] sm:text-6xl lg:text-[4.5rem]">
               Discover a World Beyond Ordinary.
             </h1>
-            <p className="vimroll-hero-stagger mt-6 max-w-xl text-base leading-relaxed text-[#E8E1D5]/90 sm:text-lg">
+            <p className="vimroll-hero-stagger mt-5 sm:mt-6 max-w-xl text-sm leading-relaxed text-[#E8E1D5]/90 sm:text-lg">
               Explore extraordinary residences curated for those who appreciate
               exceptional living.
             </p>
 
-            <div className="vimroll-hero-stagger mt-9 flex flex-wrap items-center gap-4">
-              <Button variant="gold" size="lg" to="/properties">
+            <div className="vimroll-hero-stagger mt-8 sm:mt-9 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3.5 sm:gap-4">
+              <Button variant="gold" size="lg" to="/properties" className="w-full sm:w-auto">
                 <span>Explore Properties</span>
                 <ArrowRight className="h-4 w-4" strokeWidth={1.6} />
               </Button>
-              <Button variant="outlineLight" size="lg" to="/collections">
+              <Button variant="outlineLight" size="lg" to="/collections" className="w-full sm:w-auto">
                 Discover Our Collections
               </Button>
             </div>
@@ -148,12 +148,30 @@ export default function Home() {
         </Container>
 
         {/* Hero Search Panel */}
-        <Container className="relative z-10 mt-6">
+        <Container className="relative z-20 mt-4 sm:mt-6">
           <div className="vimroll-hero-stagger">
             <PropertySearch />
           </div>
         </Container>
       </section>
+
+      {/* Editorial Recognition Strip */}
+      <div className="border-b border-[#E8E1D5] bg-[#EFECE5] py-5">
+        <Container className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-center sm:justify-between">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[#41413D]/65">
+            Editorial Design Inspired By
+          </span>
+          <div className="flex flex-wrap items-center justify-center gap-x-7 gap-y-2 font-serif text-sm tracking-[0.2em] text-[#171816]/60 sm:text-base">
+            <span>ARCHITECTURAL DIGEST</span>
+            <span className="hidden sm:inline text-[#B69A69]">·</span>
+            <span>FT HOW TO SPEND IT</span>
+            <span className="hidden sm:inline text-[#B69A69]">·</span>
+            <span>WALLPAPER*</span>
+            <span className="hidden md:inline text-[#B69A69]">·</span>
+            <span className="hidden md:inline">SOTHEBY’S JOURNAL</span>
+          </div>
+        </Container>
+      </div>
 
       {/* 5.3 FEATURED PROPERTIES */}
       <section className="py-20 sm:py-28">

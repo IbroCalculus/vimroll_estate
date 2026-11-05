@@ -142,7 +142,8 @@ export default function Properties() {
                 <PropertyMap
                   properties={properties}
                   highlightedId={highlightedId}
-                  className="h-[640px] w-full"
+                  onHoverProperty={setHighlightedId}
+                  className="h-[72vh] min-h-[440px] w-full"
                 />
               </Suspense>
             ) : viewMode === 'split' ? (
@@ -162,7 +163,8 @@ export default function Properties() {
                       <PropertyMap
                         properties={properties}
                         highlightedId={highlightedId}
-                        className="h-[460px] lg:h-[calc(100vh-130px)] w-full"
+                        onHoverProperty={setHighlightedId}
+                        className="h-[420px] lg:h-[calc(100vh-130px)] w-full"
                       />
                     </Suspense>
                   </div>

@@ -28,7 +28,7 @@ export default function SavedProperties() {
   const handleCompareSaved = () => {
     savedProperties.slice(0, 4).forEach((prop) => {
       if (!compareIds.includes(prop.id)) {
-        toggleCompare(prop.id);
+        toggleCompare(prop.id, prop.title);
       }
     });
     const el = document.getElementById('comparison-section');

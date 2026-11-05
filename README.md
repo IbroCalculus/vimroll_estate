@@ -42,6 +42,25 @@
   </tr>
 </table>
 
+### Mobile-First Responsive Experience (`375px` – `390px`)
+
+<table>
+  <tr>
+    <td width="33%" align="center">
+      <strong>Mobile Hero &amp; Search</strong><br /><br />
+      <img src="./docs/screenshots/mobile-home.png" alt="VIMROLL Estate Mobile Homepage" width="100%" />
+    </td>
+    <td width="33%" align="center">
+      <strong>Mobile Discovery &amp; Filter Drawer</strong><br /><br />
+      <img src="./docs/screenshots/mobile-properties.png" alt="VIMROLL Estate Mobile Properties" width="100%" />
+    </td>
+    <td width="33%" align="center">
+      <strong>Mobile Dossier &amp; Sticky Enquiry Bar</strong><br /><br />
+      <img src="./docs/screenshots/mobile-details.png" alt="VIMROLL Estate Mobile Property Details" width="100%" />
+    </td>
+  </tr>
+</table>
+
 ---
 
 ## Curated Global Portfolio
@@ -87,6 +106,17 @@ Every residence in the **VIMROLL Estate** anthology carries a unique `VMR-2026-X
 
 ---
 
+## Signature UX & International Buyer Capabilities
+
+- **Global Multi-Currency & Measurement Switcher**: Live conversion across `USD ($)`, `GBP (£)`, `EUR (€)`, `AED`, and `NGN (₦)` plus instant `sqm` ↔ `sq ft` unit toggling across every card, map pin, dossier, calculator, and comparison matrix.
+- **`⌘K` / `Ctrl+K` Spotlight Search**: Instant global search modal across residences, `VMR-2026-XXX` reference codes, international destinations, and architectural collections.
+- **Bespoke Accessible Controls (`LuxurySelect`)**: Custom keyboard-navigable (`ArrowUp`, `ArrowDown`, `Enter`, `Escape`, `role="listbox"`) dropdowns with zero raw OS `<select>` menus.
+- **Inline Card Photo Scrubber & Bidirectional Map Sync**: Cycle through residence photography directly inside listing cards with segmented progress indicators, and hover either map pins or listing cards to cross-highlight in real time.
+- **Private Wealth Financing Estimator**: Interactive equity contribution, amortisation horizon, and private bank rate sliders calculating monthly servicing in the buyer's chosen currency.
+- **Mobile-First Ergonomics**: `100svh` hero sizing, `44px` touch targets, slide-up mobile filter & sort bottom-sheet drawer on `/properties`, sticky mobile bottom enquiry bar on `/properties/:slug`, and horizontal-scroll comparison hints.
+
+---
+
 ## Brand & Design Direction
 
 | Swatch | Token | Hex | Usage |
@@ -104,11 +134,11 @@ Every residence in the **VIMROLL Estate** anthology carries a unique `VMR-2026-X
 
 ## Key Features & Routes
 
-- `/` — **Homepage**: Full-bleed villa hero with GSAP staggered headline reveal, subtle scroll parallax, live URL-synced search panel, Featured Residences, Editorial Brand Introduction with animated counters, 6 Destinations, 5 Exclusive Collections, Why VIMROLL pillars, and Private Advisory CTA.
-- `/properties` — **Property Discovery Engine**: Keyword/reference search, destination, typology, min/max price, bedrooms, bathrooms, minimum area, sorting, active filter chips, Load More pagination, and **4 view modes** (*Grid*, *Editorial List*, *Split List + Map*, and *Full Map*).
-- `/properties/:slug` — **Residence Dossier**: `VMR-2026-XXX` reference, Save/Compare/Share controls, 5-photo architectural gallery + keyboard-accessible fullscreen Lightbox (`ArrowLeft`, `ArrowRight`, `Escape`), overview metrics, amenities checklist, interactive Leaflet estate map, nearby landmarks, comparable residences, and sticky Private Client Advisor enquiry & viewing scheduler.
+- `/` — **Homepage**: Full-bleed `100svh` villa hero with GSAP staggered headline reveal, subtle scroll parallax, editorial recognition strip, live URL-synced search panel, Featured Residences, Editorial Brand Introduction with animated counters, 6 Destinations, 5 Exclusive Collections, Why VIMROLL pillars, and Private Advisory CTA.
+- `/properties` — **Property Discovery Engine**: Keyword/reference search, destination, typology, min/max price, bedrooms, bathrooms, minimum area, sorting, mobile bottom-sheet filter drawer, active filter chips, Load More pagination, and **4 view modes** (*Grid*, *Editorial List*, *Split List + Map*, and *Full Map*).
+- `/properties/:slug` — **Residence Dossier**: `VMR-2026-XXX` reference, Save/Compare/Share controls with tactile toast feedback, 5-photo architectural gallery + keyboard-accessible fullscreen Lightbox, overview metrics, amenities checklist, Private Wealth Financing Estimator, interactive Leaflet estate map, nearby landmarks, comparable residences, sticky Private Client Advisor enquiry & viewing scheduler, and mobile sticky bottom action bar.
 - `/collections` & `/collections/:slug` — **Curated Collections**: Magazine-style index and individual anthology pages (*Waterfront Estates*, *Modern Masterpieces*, *Private Villas*, *Penthouse Living*, *Architectural Icons*).
-- `/locations` — **Destination Discovery**: Market profiles across Dubai, London, New York, Paris, Marbella, and Lagos with one-click filtered portfolio navigation.
+- `/locations` — **Destination Discovery**: Market profiles across Dubai, London, New York, Paris, Marbella, and Lagos with live currency-formatted entry pricing and one-click filtered portfolio navigation.
 - `/about` — **About VIMROLL Estate**: Architectural curation ethos, global metrics, and Senior Private Client Advisors.
 - `/contact` — **Contact & Private Enquiries**: Global advisory offices + React Hook Form & Zod validated enquiry experience.
 - `/saved` — **Saved Residences & Side-by-Side Comparison**: Persistent `localStorage` shortlist and responsive multi-property comparison matrix (also accessible globally via the floating Compare Tray).
@@ -127,7 +157,7 @@ Every residence in the **VIMROLL Estate** anthology carries a unique `VMR-2026-X
 | Global Client State | Zustand (`persist` middleware) |
 | Data / Server State | TanStack Query v5 |
 | Form Handling & Validation | React Hook Form + Zod |
-| Interactive Maps | Leaflet + React Leaflet (CartoDB Positron tiles — zero API key required) |
+| Interactive Maps | Leaflet + React Leaflet (warm monochrome OpenStreetMap atlas — zero API key required) |
 | Page Metadata | React Helmet Async |
 | Icons | Lucide React |
 
@@ -145,9 +175,9 @@ vimroll_estate/
 ├── src/
 │   ├── components/
 │   │   ├── animations/        # PageTransition, Reveal, AnimatedCounter
-│   │   ├── common/            # Button, Container, SectionHeading, LuxuryImage, Modal, PageMeta
-│   │   ├── layout/            # Navbar, MobileDrawer, Footer, CompareTray, PageLayout
-│   │   └── property/          # PropertyCard, PropertyGrid, PropertySearch, PropertyFilters, PropertyMap, PropertyGallery, EnquiryPanel
+│   │   ├── common/            # Button, Container, SectionHeading, LuxuryImage, LuxurySelect, ToastViewport, Modal, PageMeta
+│   │   ├── layout/            # Navbar, MobileDrawer, CommandSearch, Footer, CompareTray, PageLayout
+│   │   └── property/          # PropertyCard, PropertyGrid, PropertySearch, PropertyFilters, PropertyMap, PropertyGallery, AcquisitionCalculator, EnquiryPanel
 │   ├── data/                  # properties.js (16), collections.js (5), locations.js (6), consultants.js (4)
 │   ├── features/
 │   │   ├── comparison/        # ComparisonMatrix
@@ -155,9 +185,9 @@ vimroll_estate/
 │   ├── hooks/                 # useReducedMotionPref, useScrollThreshold
 │   ├── pages/                 # Home, Properties, PropertyDetails, Collections, CollectionDetails, Locations, About, Contact, SavedProperties, NotFound
 │   ├── services/              # FastAPI-ready api.js client layer
-│   ├── store/                 # Zustand persisted favourites & comparison store
+│   ├── store/                 # Zustand persisted favourites, comparison, currency, unit, command search & toast store
 │   ├── styles/                # Tailwind v4 @theme tokens & custom Leaflet pin styles
-│   └── utils/                 # Price, sqm/sqft, and URL search-param formatters
+│   └── utils/                 # Multi-currency, sqm/sqft, and URL search-param formatters
 ├── vercel.json
 └── package.json
 ```

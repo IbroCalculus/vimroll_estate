@@ -54,7 +54,7 @@ export function Modal({
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className={`relative z-10 max-h-[90vh] w-full ${maxWidth} overflow-y-auto border border-[#E8E1D5] bg-[#FFFFFF] shadow-2xl`}
           >
-            <div className="sticky top-0 z-20 flex items-start justify-between border-b border-[#E8E1D5] bg-[#FFFFFF] px-6 py-5 sm:px-8">
+            <div className="sticky top-0 z-20 flex items-start justify-between border-b border-[#E8E1D5] bg-[#FFFFFF] px-5 py-4 sm:px-8 sm:py-5">
               <div>
                 {eyebrow && (
                   <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#B69A69]">
@@ -62,7 +62,7 @@ export function Modal({
                   </p>
                 )}
                 {title && (
-                  <h3 className="font-serif text-2xl font-normal text-[#171816]">
+                  <h3 className="font-serif text-xl font-normal text-[#171816] sm:text-2xl">
                     {title}
                   </h3>
                 )}
@@ -71,13 +71,13 @@ export function Modal({
                 type="button"
                 onClick={onClose}
                 aria-label="Close dialog"
-                className="flex h-9 w-9 items-center justify-center border border-[#E8E1D5] text-[#41413D] transition-colors hover:border-[#171816] hover:text-[#171816]"
+                className="flex h-10 w-10 shrink-0 items-center justify-center border border-[#E8E1D5] text-[#41413D] transition-colors hover:border-[#171816] hover:text-[#171816]"
               >
                 <X className="h-4 w-4" strokeWidth={1.5} />
               </button>
             </div>
 
-            <div className="p-6 sm:p-8">{children}</div>
+            <div className="p-4 sm:p-8">{children}</div>
           </motion.div>
         </div>
       )}

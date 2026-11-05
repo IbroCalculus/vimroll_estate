@@ -1,30 +1,79 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
-import { buildSearchParamsFromFilters } from '../../utils/formatters';
+import { LuxurySelect } from '../common/LuxurySelect';
+import { buildSearchParamsFromFilters, formatPrice } from '../../utils/formatters';
+import { usePropertyStore } from '../../store/usePropertyStore';
 
-const PRICE_OPTIONS = [
-  { label: 'Any Price Range', min: '', max: '' },
-  { label: 'Up to $10,000,000', min: '', max: '10000000' },
-  { label: '$10,000,000 – $20,000,000', min: '10000000', max: '20000000' },
-  { label: '$20,000,000+', min: '20000000', max: '' },
+const DESTINATION_OPTIONS = [
+  { value: '', label: 'All Destinations' },
+  { value: 'Dubai', label: 'Dubai, UAE' },
+  { value: 'London', label: 'London, United Kingdom' },
+  { value: 'New York', label: 'New York, USA' },
+  { value: 'Paris', label: 'Paris, France' },
+  { value: 'Marbella', label: 'Marbella, Spain' },
+  { value: 'Lagos', label: 'Lagos, Nigeria' },
+];
+
+const TYPE_OPTIONS = [
+  { value: '', label: 'All Residence Types' },
+  { value: 'Villa', label: 'Private Villa' },
+  { value: 'Penthouse', label: 'Penthouse' },
+  { value: 'Townhouse', label: 'Townhouse' },
+  { value: 'Residence', label: 'Lateral Residence' },
+];
+
+const BED_OPTIONS = [
+  { value: '', label: 'Any' },
+  { value: '3', label: '3+ Beds' },
+  { value: '4', label: '4+ Beds' },
+  { value: '5', label: '5+ Beds' },
+  { value: '6', label: '6+ Beds' },
 ];
 
 export function PropertySearch() {
   const navigate = useNavigate();
+  const currency = usePropertyStore((state) => state.currency);
+
   const [location, setLocation] = useState('');
   const [type, setType] = useState('');
-  const [priceIndex, setPriceIndex] = useState(0);
+  const [priceIndex, setPriceIndex] = useState('0');
   const [beds, setBeds] = useState('');
+
+  const priceBrackets = useMemo(
+    () => [
+      { value: '0', label: 'Any Price Guide', min: '', max: '' },
+      {
+        value: '1',
+        label: `Up to ${formatPrice(10_000_000, currency, true)}`,
+        min: '',
+        max: '10000000',
+      },
+      {
+        value: '2',
+        label: `${formatPrice(10_000_000, currency, true)} – ${formatPrice(20_000_000, currency, true)}`,
+        min: '10000000',
+        max: '20000000',
+      },
+      {
+        value: '3',
+        label: `${formatPrice(20_000_000, currency, true)}+`,
+        min: '20000000',
+        max: '',
+      },
+    ],
+    [currency]
+  );
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const priceRange = PRICE_OPTIONS[priceIndex] || PRICE_OPTIONS[0];
+    const bracket =
+      priceBrackets.find((b) => b.value === String(priceIndex)) || priceBrackets[0];
     const params = buildSearchParamsFromFilters({
       location,
       type,
-      minPrice: priceRange.min,
-      maxPrice: priceRange.max,
+      minPrice: bracket.min,
+      maxPrice: bracket.max,
       beds,
     });
     const queryString = params.toString();
@@ -35,99 +84,53 @@ export function PropertySearch() {
     <form
       onSubmit={handleSubmit}
       aria-label="Search luxury properties"
-      className="w-full border border-[#F7F5F0]/20 bg-[#171816]/90 p-4 backdrop-blur-md shadow-[0_24px_60px_rgba(0,0,0,0.35)] sm:p-6"
+      className="w-full border border-[#F7F5F0]/20 bg-[#171816]/92 p-4 backdrop-blur-md shadow-[0_24px_60px_rgba(0,0,0,0.38)] sm:p-6"
     >
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-12 lg:items-end">
+      <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-12 lg:items-end">
         <div className="lg:col-span-3">
-          <label
-            htmlFor="hero-location"
-            className="mb-2 block text-[10px] font-semibold uppercase tracking-[0.22em] text-[#B69A69]"
-          >
-            Destination
-          </label>
-          <select
-            id="hero-location"
+          <LuxurySelect
+            theme="dark"
+            label="Destination"
             value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            className="w-full border border-[#F7F5F0]/18 bg-[#222320] px-3.5 py-3 text-sm text-[#F7F5F0] focus:border-[#B69A69] focus:outline-none"
-          >
-            <option value="">All Destinations</option>
-            <option value="Dubai">Dubai, UAE</option>
-            <option value="London">London, United Kingdom</option>
-            <option value="New York">New York, USA</option>
-            <option value="Paris">Paris, France</option>
-            <option value="Marbella">Marbella, Spain</option>
-            <option value="Lagos">Lagos, Nigeria</option>
-          </select>
+            onChange={setLocation}
+            options={DESTINATION_OPTIONS}
+          />
         </div>
 
         <div className="lg:col-span-3">
-          <label
-            htmlFor="hero-type"
-            className="mb-2 block text-[10px] font-semibold uppercase tracking-[0.22em] text-[#B69A69]"
-          >
-            Property Type
-          </label>
-          <select
-            id="hero-type"
+          <LuxurySelect
+            theme="dark"
+            label="Property Type"
             value={type}
-            onChange={(e) => setType(e.target.value)}
-            className="w-full border border-[#F7F5F0]/18 bg-[#222320] px-3.5 py-3 text-sm text-[#F7F5F0] focus:border-[#B69A69] focus:outline-none"
-          >
-            <option value="">All Residence Types</option>
-            <option value="Villa">Private Villa</option>
-            <option value="Penthouse">Penthouse</option>
-            <option value="Townhouse">Townhouse</option>
-            <option value="Residence">Lateral Residence</option>
-          </select>
+            onChange={setType}
+            options={TYPE_OPTIONS}
+          />
         </div>
 
         <div className="lg:col-span-3">
-          <label
-            htmlFor="hero-price"
-            className="mb-2 block text-[10px] font-semibold uppercase tracking-[0.22em] text-[#B69A69]"
-          >
-            Price Guide
-          </label>
-          <select
-            id="hero-price"
+          <LuxurySelect
+            theme="dark"
+            label="Price Guide"
             value={priceIndex}
-            onChange={(e) => setPriceIndex(Number(e.target.value))}
-            className="w-full border border-[#F7F5F0]/18 bg-[#222320] px-3.5 py-3 text-sm text-[#F7F5F0] focus:border-[#B69A69] focus:outline-none"
-          >
-            {PRICE_OPTIONS.map((option, idx) => (
-              <option key={option.label} value={idx}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+            onChange={setPriceIndex}
+            options={priceBrackets}
+          />
         </div>
 
         <div className="lg:col-span-1">
-          <label
-            htmlFor="hero-beds"
-            className="mb-2 block text-[10px] font-semibold uppercase tracking-[0.22em] text-[#B69A69]"
-          >
-            Bedrooms
-          </label>
-          <select
-            id="hero-beds"
+          <LuxurySelect
+            theme="dark"
+            label="Beds"
             value={beds}
-            onChange={(e) => setBeds(e.target.value)}
-            className="w-full border border-[#F7F5F0]/18 bg-[#222320] px-3 py-3 text-sm text-[#F7F5F0] focus:border-[#B69A69] focus:outline-none"
-          >
-            <option value="">Any</option>
-            <option value="3">3+</option>
-            <option value="4">4+</option>
-            <option value="5">5+</option>
-            <option value="6">6+</option>
-          </select>
+            onChange={setBeds}
+            options={BED_OPTIONS}
+          />
         </div>
 
         <div className="sm:col-span-2 lg:col-span-2">
           <button
             type="submit"
-            className="flex w-full items-center justify-center gap-2 bg-[#B69A69] px-5 py-3.5 text-xs font-semibold uppercase tracking-[0.18em] text-[#171816] transition-colors hover:bg-[#CBB389]"
+            className="flex min-h-[44px] w-full items-center justify-center gap-2 bg-[#B69A69] px-5 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#171816] transition-colors hover:bg-[#CBB389]"
           >
             <Search className="h-3.5 w-3.5" strokeWidth={1.8} />
             <span>Search</span>
@@ -137,4 +140,3 @@ export function PropertySearch() {
     </form>
   );
 }
-

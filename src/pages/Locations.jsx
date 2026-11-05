@@ -8,9 +8,11 @@ import { PageTransition } from '../components/animations/PageTransition';
 import { Reveal } from '../components/animations/Reveal';
 import { useLocationsQuery } from '../features/properties/useProperties';
 import { formatPrice } from '../utils/formatters';
+import { usePropertyStore } from '../store/usePropertyStore';
 
 export default function Locations() {
   const { data: locations = [], isLoading } = useLocationsQuery();
+  const currency = usePropertyStore((state) => state.currency);
 
   return (
     <PageTransition>
@@ -75,7 +77,7 @@ export default function Locations() {
                           </p>
                           {loc.startingPrice && (
                             <span className="text-xs tabular-nums text-[#41413D]/75">
-                              From {formatPrice(loc.startingPrice, 'USD', true)}
+                              From {formatPrice(loc.startingPrice, currency, true)}
                             </span>
                           )}
                         </div>
