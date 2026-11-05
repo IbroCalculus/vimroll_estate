@@ -2,6 +2,7 @@ import { properties } from '../data/properties';
 import { collections } from '../data/collections';
 import { locations } from '../data/locations';
 import { consultants } from '../data/consultants';
+import { trackInteraction } from '../utils/analytics';
 
 /**
  * FastAPI-ready client service layer.
@@ -197,6 +198,13 @@ export async function fetchConsultants() {
 }
 
 export async function submitDemoEnquiry(payload) {
+  trackInteraction('enquiry_submitted', {
+    enquiryType: payload?.requestViewing ? 'Private Viewing' : 'Private Dossier',
+    reference:
+      payload?.propertyReference || payload?.propertyOfInterest || 'General Advisory',
+    preferredContact: payload?.preferredContact || 'Email',
+  });
+
   if (API_BASE_URL) {
     const res = await fetch(`${API_BASE_URL}/api/v1/enquiries`, {
       method: 'POST',

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { trackInteraction } from '../utils/analytics';
 
 const MAX_COMPARE_ITEMS = 4;
 
@@ -38,6 +39,7 @@ export const usePropertyStore = create(
       setCurrency: (currency) => {
         if (get().currency === currency) return;
         set({ currency });
+        trackInteraction('currency_changed', { currency });
         get().pushToast({
           title: `Display currency set to ${currency}`,
           detail: 'All guide prices and map markers updated.',
@@ -47,6 +49,7 @@ export const usePropertyStore = create(
       setAreaUnit: (areaUnit) => {
         if (get().areaUnit === areaUnit) return;
         set({ areaUnit });
+        trackInteraction('area_unit_changed', { areaUnit });
         get().pushToast({
           title: `Floor area set to ${areaUnit === 'sqft' ? 'Square Feet (sq ft)' : 'Square Metres (sqm)'}`,
         });
@@ -59,6 +62,10 @@ export const usePropertyStore = create(
             ? state.savedIds.filter((id) => id !== propertyId)
             : [...state.savedIds, propertyId],
         }));
+        trackInteraction(exists ? 'property_unsaved' : 'property_saved', {
+          propertyId,
+          title: propertyTitle,
+        });
         get().pushToast({
           title: exists ? 'Removed from Saved Shortlist' : 'Saved to Private Shortlist',
           detail: propertyTitle,
@@ -86,6 +93,11 @@ export const usePropertyStore = create(
             compareIds: current.filter((id) => id !== propertyId),
             compareNotice: '',
           });
+          trackInteraction('property_compare_toggled', {
+            action: 'removed',
+            propertyId,
+            title: propertyTitle,
+          });
           get().pushToast({
             title: 'Removed from comparison',
             detail: propertyTitle,
@@ -95,6 +107,11 @@ export const usePropertyStore = create(
         if (current.length >= MAX_COMPARE_ITEMS) {
           const msg = `Up to ${MAX_COMPARE_ITEMS} residences can be compared at once.`;
           set({ compareNotice: msg });
+          trackInteraction('property_compare_toggled', {
+            action: 'limit_reached',
+            propertyId,
+            title: propertyTitle,
+          });
           get().pushToast({
             title: 'Comparison limit reached',
             detail: msg,
@@ -107,6 +124,11 @@ export const usePropertyStore = create(
         set({
           compareIds: [...current, propertyId],
           compareNotice: '',
+        });
+        trackInteraction('property_compare_toggled', {
+          action: 'added',
+          propertyId,
+          title: propertyTitle,
         });
         get().pushToast({
           title: 'Added to side-by-side comparison',
@@ -124,10 +146,18 @@ export const usePropertyStore = create(
       clearCompare: () =>
         set({ compareIds: [], isCompareModalOpen: false, compareNotice: '' }),
 
-      openCompareModal: () => set({ isCompareModalOpen: true }),
+      openCompareModal: () => {
+        trackInteraction('comparison_modal_opened', {
+          count: get().compareIds.length,
+        });
+        set({ isCompareModalOpen: true });
+      },
       closeCompareModal: () => set({ isCompareModalOpen: false }),
 
-      openCommandSearch: () => set({ isCommandSearchOpen: true }),
+      openCommandSearch: () => {
+        trackInteraction('spotlight_search_opened');
+        set({ isCommandSearchOpen: true });
+      },
       closeCommandSearch: () => set({ isCommandSearchOpen: false }),
     }),
     {

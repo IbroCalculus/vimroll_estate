@@ -1,6 +1,7 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
 import { PageLayout } from './components/layout/PageLayout';
+import { VercelTelemetry } from './components/common/VercelTelemetry';
 import Home from './pages/Home';
 import Properties from './pages/Properties';
 import PropertyDetails from './pages/PropertyDetails';
@@ -31,6 +32,7 @@ export default function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </AnimatePresence>
+      <VercelTelemetry />
     </PageLayout>
   );
 }

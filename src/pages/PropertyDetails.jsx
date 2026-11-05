@@ -30,6 +30,7 @@ import {
   formatPrice,
   formatPricePerSqm,
 } from '../utils/formatters';
+import { trackInteraction } from '../utils/analytics';
 
 const PropertyMap = lazy(() =>
   import('../components/property/PropertyMap').then((mod) => ({
@@ -81,6 +82,10 @@ export default function PropertyDetails() {
 
   const handleShare = async () => {
     const shareUrl = window.location.href;
+    trackInteraction('property_shared', {
+      reference: property.reference,
+      title: property.title,
+    });
     if (navigator.share) {
       try {
         await navigator.share({
@@ -106,6 +111,9 @@ export default function PropertyDetails() {
   };
 
   const scrollToEnquiry = () => {
+    trackInteraction('mobile_sticky_enquiry_clicked', {
+      reference: property.reference,
+    });
     const el = document.getElementById('property-enquiry-panel');
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });

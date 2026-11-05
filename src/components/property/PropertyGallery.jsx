@@ -2,9 +2,18 @@ import { useCallback, useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ChevronLeft, ChevronRight, Expand, X } from 'lucide-react';
 import { LuxuryImage } from '../common/LuxuryImage';
+import { trackInteraction } from '../../utils/analytics';
 
 export function PropertyGallery({ images = [], title = 'Residence' }) {
   const [lightboxIndex, setLightboxIndex] = useState(null);
+
+  const openLightboxAt = useCallback(
+    (index) => {
+      setLightboxIndex(index);
+      trackInteraction('gallery_lightbox_opened', { title, slideIndex: index + 1 });
+    },
+    [title]
+  );
 
   const isOpen = lightboxIndex !== null;
 
@@ -49,7 +58,7 @@ export function PropertyGallery({ images = [], title = 'Residence' }) {
         {/* Primary Large Image */}
         <button
           type="button"
-          onClick={() => setLightboxIndex(0)}
+          onClick={() => openLightboxAt(0)}
           aria-label={`Open primary photo of ${title} in fullscreen gallery`}
           className="group relative aspect-[16/10] w-full overflow-hidden text-left lg:col-span-7 lg:aspect-auto lg:h-[540px]"
         >
@@ -75,7 +84,7 @@ export function PropertyGallery({ images = [], title = 'Residence' }) {
               <button
                 key={`${imgSrc}-${actualIndex}`}
                 type="button"
-                onClick={() => setLightboxIndex(actualIndex)}
+                onClick={() => openLightboxAt(actualIndex)}
                 aria-label={`View photo ${actualIndex + 1} of ${title}`}
                 className="group relative h-full w-full overflow-hidden text-left"
               >
@@ -107,7 +116,7 @@ export function PropertyGallery({ images = [], title = 'Residence' }) {
             <button
               key={`mobile-${imgSrc}-${idx}`}
               type="button"
-              onClick={() => setLightboxIndex(idx + 1)}
+              onClick={() => openLightboxAt(idx + 1)}
               aria-label={`Open photo ${idx + 2} of ${title}`}
               className="aspect-[4/3] overflow-hidden border border-[#E8E1D5]"
             >

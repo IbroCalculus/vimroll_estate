@@ -20,6 +20,7 @@ import {
   buildSearchParamsFromFilters,
   parseFiltersFromSearchParams,
 } from '../utils/formatters';
+import { trackInteraction } from '../utils/analytics';
 
 const PAGE_STEP = 6;
 
@@ -68,6 +69,7 @@ export default function Properties() {
 
   const handleViewModeChange = (mode) => {
     setViewMode(mode);
+    trackInteraction('portfolio_view_mode_changed', { viewMode: mode });
     const nextParams = buildSearchParamsFromFilters(filters);
     if (mode !== 'grid') {
       nextParams.set('view', mode);

@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { LuxuryImage } from '../common/LuxuryImage';
 import { formatArea, formatPrice } from '../../utils/formatters';
+import { trackInteraction } from '../../utils/analytics';
 import { usePropertyStore } from '../../store/usePropertyStore';
 
 export function PropertyCard({
@@ -42,12 +43,20 @@ export function PropertyCard({
     e.preventDefault();
     e.stopPropagation();
     setSlideIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
+    trackInteraction('card_photo_scrubbed', {
+      direction: 'prev',
+      reference: property.reference,
+    });
   };
 
   const handleNextSlide = (e) => {
     e.preventDefault();
     e.stopPropagation();
     setSlideIndex((prev) => (prev + 1) % totalSlides);
+    trackInteraction('card_photo_scrubbed', {
+      direction: 'next',
+      reference: property.reference,
+    });
   };
 
   return (

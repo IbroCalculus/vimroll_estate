@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { LuxurySelect } from '../common/LuxurySelect';
 import { buildSearchParamsFromFilters, formatPrice } from '../../utils/formatters';
+import { trackInteraction } from '../../utils/analytics';
 import { usePropertyStore } from '../../store/usePropertyStore';
 
 const DESTINATION_OPTIONS = [
@@ -75,6 +76,11 @@ export function PropertySearch() {
       minPrice: bracket.min,
       maxPrice: bracket.max,
       beds,
+    });
+    trackInteraction('hero_search_submitted', {
+      destination: location || 'All',
+      type: type || 'All',
+      beds: beds || 'Any',
     });
     const queryString = params.toString();
     navigate(queryString ? `/properties?${queryString}` : '/properties');
