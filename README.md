@@ -5,17 +5,21 @@
   <br />
 
   <p>
+    <a href="https://vimroll-estate.vercel.app">
+      <img src="https://img.shields.io/badge/Live_Platform-vimroll--estate.vercel.app-B69A69?style=flat-square&logo=vercel&logoColor=171816&labelColor=F7F5F0" alt="Live Demo on Vercel" />
+    </a>
     <img src="https://img.shields.io/badge/React-18.3-171816?style=flat-square&logo=react&logoColor=B69A69" alt="React 18" />
     <img src="https://img.shields.io/badge/Vite-6.0-171816?style=flat-square&logo=vite&logoColor=B69A69" alt="Vite 6" />
     <img src="https://img.shields.io/badge/Tailwind_CSS-v4-171816?style=flat-square&logo=tailwindcss&logoColor=B69A69" alt="Tailwind CSS v4" />
     <img src="https://img.shields.io/badge/Animations-Motion_%2B_GSAP-171816?style=flat-square&logoColor=B69A69" alt="Motion + GSAP" />
     <img src="https://img.shields.io/badge/Maps-Leaflet-171816?style=flat-square&logo=leaflet&logoColor=B69A69" alt="Leaflet" />
-    <img src="https://img.shields.io/badge/Language-JavaScript_(JSX)-171816?style=flat-square&logo=javascript&logoColor=B69A69" alt="JavaScript" />
+    <img src="https://img.shields.io/badge/Analytics-Vercel_Web_%2B_Speed_Insights-171816?style=flat-square&logo=vercel&logoColor=B69A69" alt="Vercel Analytics" />
   </p>
 
   <p>
     <strong>Where Exceptional Living Begins.</strong><br />
-    A flagship luxury real estate discovery platform and international property marketplace spanning <strong>Dubai, London, New York, Paris, Marbella, and Lagos</strong>.
+    A flagship luxury real estate discovery platform and international property marketplace spanning <strong>Dubai, London, New York, Paris, Marbella, and Lagos</strong>.<br />
+    <a href="https://vimroll-estate.vercel.app"><strong>Explore Live Deployment → vimroll-estate.vercel.app</strong></a>
   </p>
 </div>
 
