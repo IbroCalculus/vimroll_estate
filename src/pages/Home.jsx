@@ -1,5 +1,6 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { AnimatePresence, motion } from 'motion/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -8,8 +9,12 @@ import {
   ArrowUpRight,
   Building2,
   Compass,
+  Film,
   Globe2,
+  Pause,
+  Play,
   ShieldCheck,
+  X,
 } from 'lucide-react';
 import { PageMeta } from '../components/common/PageMeta';
 import { Container } from '../components/common/Container';
@@ -21,12 +26,15 @@ import { Reveal } from '../components/animations/Reveal';
 import { AnimatedCounter } from '../components/animations/AnimatedCounter';
 import { PropertySearch } from '../components/property/PropertySearch';
 import { PropertyCard } from '../components/property/PropertyCard';
+import { ArchitecturalVideoPlayer } from '../components/property/ArchitecturalVideoPlayer';
 import {
   useCollectionsQuery,
   useFeaturedPropertiesQuery,
   useLocationsQuery,
 } from '../features/properties/useProperties';
+import { HERO_AMBIENT_VIDEO_URL } from '../data/spatialMedia';
 import { useReducedMotionPref } from '../hooks/useReducedMotionPref';
+import { trackInteraction } from '../utils/analytics';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -60,11 +68,30 @@ const WHY_VIMROLL_PILLARS = [
 export default function Home() {
   const heroSectionRef = useRef(null);
   const heroBgRef = useRef(null);
+  const heroVideoRef = useRef(null);
   const prefersReducedMotion = useReducedMotionPref();
+
+  const [isHeroVideoPaused, setIsHeroVideoPaused] = useState(false);
+  const [showShowreelModal, setShowShowreelModal] = useState(false);
 
   const { data: featuredProperties = [] } = useFeaturedPropertiesQuery(4);
   const { data: destinations = [] } = useLocationsQuery();
   const { data: collections = [] } = useCollectionsQuery();
+
+  const toggleHeroAmbientVideo = () => {
+    const vid = heroVideoRef.current;
+    if (!vid) return;
+    if (vid.paused) {
+      vid.play().catch(() => {});
+      setIsHeroVideoPaused(false);
+    } else {
+      vid.pause();
+      setIsHeroVideoPaused(true);
+    }
+    trackInteraction('hero_ambient_video_toggled', {
+      paused: !isHeroVideoPaused,
+    });
+  };
 
   useGSAP(
     () => {
@@ -108,7 +135,7 @@ export default function Home() {
         ref={heroSectionRef}
         className="relative flex min-h-[100svh] flex-col justify-between bg-[#171816] pt-28 pb-8 text-[#F7F5F0] sm:pt-36 sm:pb-12"
       >
-        {/* Background Architectural Photograph */}
+        {/* Background Architectural Ambient Film + High-Res Fallback Photograph */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <div ref={heroBgRef} className="h-full w-full scale-[1.02]">
             <img
@@ -117,33 +144,91 @@ export default function Home() {
               fetchPriority="high"
               className="h-full w-full object-cover"
             />
+            {!prefersReducedMotion && (
+              <video
+                ref={heroVideoRef}
+                src={HERO_AMBIENT_VIDEO_URL}
+                poster="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=2000&q=85"
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="absolute inset-0 h-full w-full object-cover opacity-85"
+              />
+            )}
           </div>
-          <div className="absolute inset-0 bg-gradient-to-b from-[#171816]/75 via-[#171816]/42 to-[#171816]/92" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#171816]/75 via-[#171816]/45 to-[#171816]/92" />
         </div>
 
         {/* Hero Copy */}
         <Container className="relative z-10 my-auto py-8 sm:py-12">
-          <div className="max-w-3xl">
-            <p className="vimroll-hero-stagger text-[10.5px] sm:text-[11px] font-semibold uppercase tracking-[0.28em] text-[#B69A69]">
-              EXCEPTIONAL PROPERTIES. EXTRAORDINARY LIVING.
-            </p>
-            <h1 className="vimroll-hero-stagger mt-4 sm:mt-5 font-serif text-4xl font-normal leading-[1.06] text-[#F7F5F0] sm:text-6xl lg:text-[4.5rem]">
-              Discover a World Beyond Ordinary.
-            </h1>
-            <p className="vimroll-hero-stagger mt-5 sm:mt-6 max-w-xl text-sm leading-relaxed text-[#E8E1D5]/90 sm:text-lg">
-              Explore extraordinary residences curated for those who appreciate
-              exceptional living.
-            </p>
+          <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
+            <div className="max-w-3xl">
+              <p className="vimroll-hero-stagger text-[10.5px] sm:text-[11px] font-semibold uppercase tracking-[0.28em] text-[#B69A69]">
+                EXCEPTIONAL PROPERTIES. EXTRAORDINARY LIVING.
+              </p>
+              <h1 className="vimroll-hero-stagger mt-4 sm:mt-5 font-serif text-4xl font-normal leading-[1.06] text-[#F7F5F0] sm:text-6xl lg:text-[4.5rem]">
+                Discover a World Beyond Ordinary.
+              </h1>
+              <p className="vimroll-hero-stagger mt-5 sm:mt-6 max-w-xl text-sm leading-relaxed text-[#E8E1D5]/90 sm:text-lg">
+                Explore extraordinary residences curated for those who appreciate
+                exceptional living—complete with interactive 3D spatial models,
+                solar-path studies, and 4K architectural films.
+              </p>
 
-            <div className="vimroll-hero-stagger mt-8 sm:mt-9 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3.5 sm:gap-4">
-              <Button variant="gold" size="lg" to="/properties" className="w-full sm:w-auto">
-                <span>Explore Properties</span>
-                <ArrowRight className="h-4 w-4" strokeWidth={1.6} />
-              </Button>
-              <Button variant="outlineLight" size="lg" to="/collections" className="w-full sm:w-auto">
-                Discover Our Collections
-              </Button>
+              <div className="vimroll-hero-stagger mt-8 sm:mt-9 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3.5 sm:gap-4">
+                <Button variant="gold" size="lg" to="/properties" className="w-full sm:w-auto">
+                  <span>Explore Properties</span>
+                  <ArrowRight className="h-4 w-4" strokeWidth={1.6} />
+                </Button>
+                <Button variant="outlineLight" size="lg" to="/collections" className="w-full sm:w-auto">
+                  Discover Our Collections
+                </Button>
+                {featuredProperties[0] && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowShowreelModal(true);
+                      trackInteraction('hero_showreel_modal_opened', {
+                        reference: featuredProperties[0].reference,
+                      });
+                    }}
+                    className="inline-flex min-h-[48px] items-center justify-center gap-2.5 border border-[#B69A69]/60 bg-[#171816]/75 px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.2em] text-[#F7F5F0] backdrop-blur-xs transition-colors hover:border-[#B69A69] hover:bg-[#B69A69] hover:text-[#171816]"
+                  >
+                    <Film className="h-4 w-4 text-[#B69A69] group-hover:text-[#171816]" />
+                    <span>Watch Architectural Film</span>
+                  </button>
+                )}
+              </div>
             </div>
+
+            {/* Discreet Ambient Film Control Pill */}
+            {!prefersReducedMotion && (
+              <div className="vimroll-hero-stagger hidden lg:flex items-center gap-2 self-end">
+                <button
+                  type="button"
+                  onClick={toggleHeroAmbientVideo}
+                  aria-label={
+                    isHeroVideoPaused
+                      ? 'Resume ambient architectural background film'
+                      : 'Pause ambient architectural background film'
+                  }
+                  className="inline-flex items-center gap-2 border border-[#F7F5F0]/25 bg-[#171816]/70 px-3.5 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#E8E1D5] backdrop-blur-xs transition-colors hover:border-[#B69A69] hover:text-[#B69A69]"
+                >
+                  {isHeroVideoPaused ? (
+                    <>
+                      <Play className="h-3 w-3 text-[#B69A69]" />
+                      <span>Play Ambient Film</span>
+                    </>
+                  ) : (
+                    <>
+                      <Pause className="h-3 w-3 text-[#B69A69]" />
+                      <span>Ambient Film · Live</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            )}
           </div>
         </Container>
 
@@ -154,6 +239,43 @@ export default function Home() {
           </div>
         </Container>
       </section>
+
+      {/* Fullscreen Architectural Showreel Modal */}
+      <AnimatePresence>
+        {showShowreelModal && featuredProperties[0] && (
+          <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-label="VIMROLL Estate 4K Architectural Showreel"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-[#171816]/95 p-4 sm:p-8"
+          >
+            <div className="w-full max-w-5xl">
+              <div className="mb-3 flex items-center justify-between text-[#F7F5F0]">
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[#B69A69]">
+                    VIMROLL Estate · Featured Residence Film
+                  </p>
+                  <p className="font-serif text-xl">
+                    {featuredProperties[0].title} — {featuredProperties[0].location.city}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowShowreelModal(false)}
+                  aria-label="Close architectural film modal"
+                  className="flex h-10 w-10 items-center justify-center border border-[#F7F5F0]/25 text-[#F7F5F0] transition-colors hover:border-[#B69A69] hover:text-[#B69A69]"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+              <ArchitecturalVideoPlayer property={featuredProperties[0]} />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Editorial Recognition Strip */}
       <div className="border-b border-[#E8E1D5] bg-[#EFECE5] py-5">
@@ -298,7 +420,7 @@ export default function Home() {
               description="Six world-class residential markets united by cultural vitality, architectural distinction, and enduring global demand."
               action={
                 <Button variant="outline" to="/locations">
-                  <span>All Destinations</span>
+                  <span>All Destinations & 3D Globe</span>
                   <ArrowUpRight className="h-4 w-4" strokeWidth={1.5} />
                 </Button>
               }
@@ -489,4 +611,3 @@ export default function Home() {
     </PageTransition>
   );
 }
-

@@ -1,3 +1,4 @@
+import { Suspense, lazy } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { PageMeta } from '../components/common/PageMeta';
 import { Container } from '../components/common/Container';
@@ -10,6 +11,12 @@ import { useLocationsQuery } from '../features/properties/useProperties';
 import { formatPrice } from '../utils/formatters';
 import { usePropertyStore } from '../store/usePropertyStore';
 
+const Interactive3DGlobe = lazy(() =>
+  import('../components/property/Interactive3DGlobe').then((mod) => ({
+    default: mod.Interactive3DGlobe,
+  }))
+);
+
 export default function Locations() {
   const { data: locations = [], isLoading } = useLocationsQuery();
   const currency = usePropertyStore((state) => state.currency);
@@ -17,8 +24,8 @@ export default function Locations() {
   return (
     <PageTransition>
       <PageMeta
-        title="Global Destinations"
-        description="Explore VIMROLL Estate luxury residential markets across Dubai, London, New York, Paris, Marbella, and Lagos."
+        title="Global Destinations & 3D Enclave Globe"
+        description="Explore VIMROLL Estate luxury residential markets and private aviation corridors across Dubai, London, New York, Paris, Marbella, and Lagos."
       />
 
       {/* Hero */}
@@ -34,15 +41,27 @@ export default function Locations() {
 
         <Container className="relative z-10">
           <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#B69A69]">
-            Destination Discovery
+            Destination Discovery & Aviation Network
           </p>
           <h1 className="mt-4 max-w-3xl font-serif text-4xl font-normal leading-[1.08] text-[#F7F5F0] sm:text-6xl">
             Six Global Capitals of Exceptional Living.
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-[#E8E1D5]/80">
             From heritage European squares and Manhattan park-front towers to private
-            peninsulas in Dubai, Marbella, and Lagos.
+            peninsulas in Dubai, Marbella, and Lagos—explore our interactive 3D enclave
+            globe and direct private-aviation corridors below.
           </p>
+        </Container>
+      </section>
+
+      {/* Interactive 3D WebGL Globe & Aviation Corridors */}
+      <section className="bg-[#171816] pb-16 sm:pb-24">
+        <Container>
+          <Suspense
+            fallback={<Loader label="Initializing 3D global enclave globe..." />}
+          >
+            <Interactive3DGlobe locations={locations} />
+          </Suspense>
         </Container>
       </section>
 
@@ -130,4 +149,3 @@ export default function Locations() {
     </PageTransition>
   );
 }
-

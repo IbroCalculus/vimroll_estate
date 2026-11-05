@@ -2,6 +2,10 @@ import { properties } from '../data/properties';
 import { collections } from '../data/collections';
 import { locations } from '../data/locations';
 import { consultants } from '../data/consultants';
+import {
+  buildSpatialMediaForProperty,
+  getCityIntelligence,
+} from '../data/spatialMedia';
 import { trackInteraction } from '../utils/analytics';
 
 /**
@@ -14,9 +18,11 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 function enrichProperty(property) {
   const consultant =
     consultants.find((c) => c.id === property.consultantId) || consultants[0];
+  const spatial = buildSpatialMediaForProperty(property);
   return {
     ...property,
     consultant,
+    ...spatial,
   };
 }
 
@@ -189,6 +195,7 @@ export async function fetchLocations() {
       ...loc,
       propertyCount: matching.length,
       startingPrice,
+      intelligence: getCityIntelligence(loc.city),
     };
   });
 }

@@ -53,3 +53,4 @@ export function trackInteraction(eventName, properties = {}) {
     // Never disrupt UI interactions if an ad-blocker or offline state blocks telemetry
   }
 }
+

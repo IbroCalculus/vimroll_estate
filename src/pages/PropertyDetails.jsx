@@ -11,6 +11,7 @@ import {
   Heart,
   MapPin,
   Maximize2,
+  Printer,
   Scale,
   Share2,
 } from 'lucide-react';
@@ -23,6 +24,7 @@ import { PropertyGallery } from '../components/property/PropertyGallery';
 import { EnquiryPanel } from '../components/property/EnquiryPanel';
 import { PropertyCard } from '../components/property/PropertyCard';
 import { AcquisitionCalculator } from '../components/property/AcquisitionCalculator';
+import { EnclaveIntelligence } from '../components/property/EnclaveIntelligence';
 import { usePropertyDetailsQuery } from '../features/properties/useProperties';
 import { usePropertyStore } from '../store/usePropertyStore';
 import {
@@ -110,6 +112,22 @@ export default function PropertyDetails() {
     }
   };
 
+  const handlePrintDossier = () => {
+    trackInteraction('dossier_pdf_printed', {
+      reference: property.reference,
+      title: property.title,
+    });
+    pushToast({
+      title: 'Preparing Executive PDF Dossier',
+      detail: `${property.reference} · ${property.title}`,
+    });
+    setTimeout(() => {
+      if (typeof window !== 'undefined' && window.print) {
+        window.print();
+      }
+    }, 150);
+  };
+
   const scrollToEnquiry = () => {
     trackInteraction('mobile_sticky_enquiry_clicked', {
       reference: property.reference,
@@ -188,8 +206,8 @@ export default function PropertyDetails() {
                 </p>
               </div>
 
-              {/* Action Buttons: Compare, Save, Share */}
-              <div className="flex items-center gap-2">
+              {/* Action Buttons: Compare, Save, Share, Print Dossier */}
+              <div className="flex flex-wrap items-center gap-2">
                 <button
                   type="button"
                   onClick={() => toggleCompare(property.id, property.title)}
@@ -244,12 +262,27 @@ export default function PropertyDetails() {
                     </>
                   )}
                 </button>
+
+                <button
+                  type="button"
+                  onClick={handlePrintDossier}
+                  aria-label="Print or export executive PDF dossier"
+                  title="Print / Export PDF Dossier"
+                  className="inline-flex min-h-[44px] items-center gap-2 border border-[#E8E1D5] bg-white px-3.5 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-[#171816] transition-colors hover:border-[#171816] sm:px-4"
+                >
+                  <Printer className="h-3.5 w-3.5 text-[#B69A69]" strokeWidth={1.6} />
+                  <span className="hidden md:inline">PDF Dossier</span>
+                </button>
               </div>
             </div>
           </header>
 
-          {/* Gallery & Lightbox */}
-          <PropertyGallery images={property.images} title={property.title} />
+          {/* Unified 4-Mode Residence Media Suite (Photos, 4K Film, 3D Spatial & Sun-Path, Interactive Blueprint) */}
+          <PropertyGallery
+            images={property.images}
+            title={property.title}
+            property={property}
+          />
 
           {/* Two-Column Body: Specifications & Narrative vs Sticky Consultant Panel */}
           <div className="mt-10 grid grid-cols-1 gap-12 sm:mt-12 lg:grid-cols-12">
@@ -369,6 +402,9 @@ export default function PropertyDetails() {
                   ))}
                 </ul>
               </section>
+
+              {/* UHNW Logistics, Private Aviation & Environmental Intelligence */}
+              <EnclaveIntelligence property={property} />
 
               {/* Private Wealth Financing Estimator */}
               <AcquisitionCalculator usdPrice={property.price} />

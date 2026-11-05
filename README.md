@@ -11,14 +11,14 @@
     <img src="https://img.shields.io/badge/React-18.3-171816?style=flat-square&logo=react&logoColor=B69A69" alt="React 18" />
     <img src="https://img.shields.io/badge/Vite-6.0-171816?style=flat-square&logo=vite&logoColor=B69A69" alt="Vite 6" />
     <img src="https://img.shields.io/badge/Tailwind_CSS-v4-171816?style=flat-square&logo=tailwindcss&logoColor=B69A69" alt="Tailwind CSS v4" />
+    <img src="https://img.shields.io/badge/3D_Spatial-Three.js_WebGL-171816?style=flat-square&logo=threedotjs&logoColor=B69A69" alt="Three.js WebGL" />
     <img src="https://img.shields.io/badge/Animations-Motion_%2B_GSAP-171816?style=flat-square&logoColor=B69A69" alt="Motion + GSAP" />
-    <img src="https://img.shields.io/badge/Maps-Leaflet-171816?style=flat-square&logo=leaflet&logoColor=B69A69" alt="Leaflet" />
     <img src="https://img.shields.io/badge/Analytics-Vercel_Web_%2B_Speed_Insights-171816?style=flat-square&logo=vercel&logoColor=B69A69" alt="Vercel Analytics" />
   </p>
 
   <p>
     <strong>Where Exceptional Living Begins.</strong><br />
-    A flagship luxury real estate discovery platform and international property marketplace spanning <strong>Dubai, London, New York, Paris, Marbella, and Lagos</strong>.<br />
+    A flagship luxury real estate discovery platform, 3D spatial exploration suite, and international property marketplace spanning <strong>Dubai, London, New York, Paris, Marbella, and Lagos</strong>.<br />
     <a href="https://vimroll-estate.vercel.app"><strong>Explore Live Deployment → vimroll-estate.vercel.app</strong></a>
   </p>
 </div>
@@ -27,7 +27,7 @@
 
 ## Visual Showcase
 
-### Flagship Homepage & Live Search
+### Flagship Homepage, Ambient Architectural Film & Live Search
 ![VIMROLL Estate Homepage Hero](./docs/screenshots/home-hero.png)
 
 ### Property Discovery — Split List & Interactive Price-Pin Atlas
@@ -36,7 +36,7 @@
 <table>
   <tr>
     <td width="50%">
-      <strong>Residence Dossier &amp; 5-Photo Mosaic Gallery</strong><br /><br />
+      <strong>Residence Dossier &amp; 4-Mode Spatial Media Suite</strong><br /><br />
       <img src="./docs/screenshots/property-details.png" alt="VIMROLL Estate Property Details Dossier" width="100%" />
     </td>
     <td width="50%">
@@ -64,6 +64,18 @@
     </td>
   </tr>
 </table>
+
+---
+
+## 3D Spatial Architecture, Video Walkthroughs & UHNW Intelligence
+
+- **Unified 4-Mode Residence Media Suite (`/properties/:slug`)**:
+  1. **Photographs + Daylight / Twilight Atmospheric Grading**: Switch any residence gallery between crisp daytime light and warm dusk illumination grading.
+  2. **4K Choreographed Architectural Film (`01:04`)**: Interactive 4-chapter cinematic walkthrough (*01 · Architectural Arrival & Facade*, *02 · Principal Reception & Living Volume*, *03 · Primary Suite & Private Atelier*, *04 · Terrace Horizon & Dusk Illumination*) with scrubbable `#B69A69` timeline, `1.0x`/`0.75x` slow-motion toggle, fullscreen mode, and optional Web Audio ambient soundscape. Also available as an inline preview inside every `PropertyCard`.
+  3. **Interactive 3D Architectural Maquette & Live Solar-Path Stage (`Three.js WebGL`)**: Orbitable 3D massing model tailored to each residence's typology (*Sky Penthouse*, *Georgian/Haussmann Townhouse*, *Cantilevered Waterfront Villa*) with **Explode Floors (`L0`–`L3`)**, 4 camera presets (*Aerial 3/4*, *Facade*, *Pool & Loggia*, *Plan View*), and a **Live Solar-Path Scrubber (`06:00` – `22:00`)** casting real-time sun trajectories and warm interior/pool glow at night.
+  4. **Interactive Multi-Level CAD Blueprint Explorer**: Vector architectural floorplates across 3 levels with clickable room zones, live `sqm`/`sq ft` unit conversion, ceiling heights, and solar aspect notes.
+- **Interactive 3D Global Enclave Globe & Private Aviation Network (`/locations`)**: Orbitable dark-obsidian Three.js globe plotting VIMROLL's 6 global capitals (**Dubai, London, New York, Paris, Marbella, Lagos**) with elevated 3D great-circle private-jet flight corridors (*Gulfstream G700* / *Bombardier Global 7500* flight durations and nautical miles).
+- **UHNW Logistics, Aviation & Technical Intelligence Dossier**: Dedicated executive brief on every residence detailing nearest private jet FBO transfer time, heliport/yacht berth capability, acoustic glazing rating (`dB`), security protocol tier, and one-click **PDF Dossier Print**.
 
 ---
 
@@ -112,10 +124,10 @@ Every residence in the **VIMROLL Estate** anthology carries a unique `VMR-2026-X
 
 ## Signature UX & International Buyer Capabilities
 
-- **Global Multi-Currency & Measurement Switcher**: Live conversion across `USD ($)`, `GBP (£)`, `EUR (€)`, `AED`, and `NGN (₦)` plus instant `sqm` ↔ `sq ft` unit toggling across every card, map pin, dossier, calculator, and comparison matrix.
+- **Global Multi-Currency & Measurement Switcher**: Live conversion across `USD ($)`, `GBP (£)`, `EUR (€)`, `AED`, and `NGN (₦)` plus instant `sqm` ↔ `sq ft` unit toggling across every card, map pin, 3D stage, floorplan, dossier, calculator, and comparison matrix.
 - **`⌘K` / `Ctrl+K` Spotlight Search**: Instant global search modal across residences, `VMR-2026-XXX` reference codes, international destinations, and architectural collections.
 - **Bespoke Accessible Controls (`LuxurySelect`)**: Custom keyboard-navigable (`ArrowUp`, `ArrowDown`, `Enter`, `Escape`, `role="listbox"`) dropdowns with zero raw OS `<select>` menus.
-- **Inline Card Photo Scrubber & Bidirectional Map Sync**: Cycle through residence photography directly inside listing cards with segmented progress indicators, and hover either map pins or listing cards to cross-highlight in real time.
+- **Inline Card Photo Scrubber, Inline Film Preview & 3D Tilt**: Cycle through residence photography or launch an inline architectural film preview directly inside listing cards, paired with subtle 3D perspective card tilt and bidirectional map pin highlighting.
 - **Private Wealth Financing Estimator**: Interactive equity contribution, amortisation horizon, and private bank rate sliders calculating monthly servicing in the buyer's chosen currency.
 - **Mobile-First Ergonomics**: `100svh` hero sizing, `44px` touch targets, slide-up mobile filter & sort bottom-sheet drawer on `/properties`, sticky mobile bottom enquiry bar on `/properties/:slug`, and horizontal-scroll comparison hints.
 
@@ -125,27 +137,14 @@ Every residence in the **VIMROLL Estate** anthology carries a unique `VMR-2026-X
 
 | Swatch | Token | Hex | Usage |
 | :---: | :--- | :--- | :--- |
-| ![#171816](https://placehold.co/18x18/171816/171816.png) | **Midnight Charcoal** | `#171816` | Hero overlays, dark editorial bands, CTA, footer |
+| ![#171816](https://placehold.co/18x18/171816/171816.png) | **Midnight Charcoal** | `#171816` | Hero overlays, 3D stages, dark editorial bands, CTA, footer |
 | ![#F7F5F0](https://placehold.co/18x18/F7F5F0/E8E1D5.png) | **Warm Ivory** | `#F7F5F0` | Primary background canvas |
-| ![#B69A69](https://placehold.co/18x18/B69A69/B69A69.png) | **Champagne Gold** | `#B69A69` | Restrained hairline accents, eyebrows, active states |
+| ![#B69A69](https://placehold.co/18x18/B69A69/B69A69.png) | **Champagne Gold** | `#B69A69` | Restrained hairline accents, 3D beacons, eyebrows, active states |
 | ![#E8E1D5](https://placehold.co/18x18/E8E1D5/E8E1D5.png) | **Soft Beige** | `#E8E1D5` | Secondary surfaces, hairline borders, filter chips |
 | ![#41413D](https://placehold.co/18x18/41413D/41413D.png) | **Deep Grey** | `#41413D` | Editorial body copy |
 | ![#FFFFFF](https://placehold.co/18x18/FFFFFF/E8E1D5.png) | **Crisp White** | `#FFFFFF` | Cards, sticky consultant panels, modals |
 
 - **Typography**: `Cormorant Garamond` for editorial display headings paired with `Manrope` (`tabular-nums`) for navigation, controls, floor areas, and pricing.
-
----
-
-## Key Features & Routes
-
-- `/` — **Homepage**: Full-bleed `100svh` villa hero with GSAP staggered headline reveal, subtle scroll parallax, editorial recognition strip, live URL-synced search panel, Featured Residences, Editorial Brand Introduction with animated counters, 6 Destinations, 5 Exclusive Collections, Why VIMROLL pillars, and Private Advisory CTA.
-- `/properties` — **Property Discovery Engine**: Keyword/reference search, destination, typology, min/max price, bedrooms, bathrooms, minimum area, sorting, mobile bottom-sheet filter drawer, active filter chips, Load More pagination, and **4 view modes** (*Grid*, *Editorial List*, *Split List + Map*, and *Full Map*).
-- `/properties/:slug` — **Residence Dossier**: `VMR-2026-XXX` reference, Save/Compare/Share controls with tactile toast feedback, 5-photo architectural gallery + keyboard-accessible fullscreen Lightbox, overview metrics, amenities checklist, Private Wealth Financing Estimator, interactive Leaflet estate map, nearby landmarks, comparable residences, sticky Private Client Advisor enquiry & viewing scheduler, and mobile sticky bottom action bar.
-- `/collections` & `/collections/:slug` — **Curated Collections**: Magazine-style index and individual anthology pages (*Waterfront Estates*, *Modern Masterpieces*, *Private Villas*, *Penthouse Living*, *Architectural Icons*).
-- `/locations` — **Destination Discovery**: Market profiles across Dubai, London, New York, Paris, Marbella, and Lagos with live currency-formatted entry pricing and one-click filtered portfolio navigation.
-- `/about` — **About VIMROLL Estate**: Architectural curation ethos, global metrics, and Senior Private Client Advisors.
-- `/contact` — **Contact & Private Enquiries**: Global advisory offices + React Hook Form & Zod validated enquiry experience.
-- `/saved` — **Saved Residences & Side-by-Side Comparison**: Persistent `localStorage` shortlist and responsive multi-property comparison matrix (also accessible globally via the floating Compare Tray).
 
 ---
 
@@ -156,45 +155,16 @@ Every residence in the **VIMROLL Estate** anthology carries a unique `VMR-2026-X
 | UI Development | React 18 (JavaScript / JSX) |
 | Build Tooling | Vite 6 |
 | Styling | Tailwind CSS v4 (`@tailwindcss/vite`) |
+| 3D Spatial & WebGL | Three.js (code-split lazy vendor chunk for 3D Maquette & Global Enclave Globe) |
 | Routing | React Router v6 |
 | Animations | Motion (`motion/react`) + GSAP & ScrollTrigger (`prefers-reduced-motion` safe) |
 | Global Client State | Zustand (`persist` middleware) |
 | Data / Server State | TanStack Query v5 |
 | Form Handling & Validation | React Hook Form + Zod |
 | Interactive Maps | Leaflet + React Leaflet (warm monochrome OpenStreetMap atlas — zero API key required) |
+| Telemetry & Analytics | Vercel Web Analytics (`@vercel/analytics`) + Vercel Speed Insights |
 | Page Metadata | React Helmet Async |
 | Icons | Lucide React |
-
----
-
-## Project Structure
-
-```text
-vimroll_estate/
-├── docs/
-│   ├── images/vimroll-banner.svg
-│   └── screenshots/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── components/
-│   │   ├── animations/        # PageTransition, Reveal, AnimatedCounter
-│   │   ├── common/            # Button, Container, SectionHeading, LuxuryImage, LuxurySelect, ToastViewport, Modal, PageMeta
-│   │   ├── layout/            # Navbar, MobileDrawer, CommandSearch, Footer, CompareTray, PageLayout
-│   │   └── property/          # PropertyCard, PropertyGrid, PropertySearch, PropertyFilters, PropertyMap, PropertyGallery, AcquisitionCalculator, EnquiryPanel
-│   ├── data/                  # properties.js (16), collections.js (5), locations.js (6), consultants.js (4)
-│   ├── features/
-│   │   ├── comparison/        # ComparisonMatrix
-│   │   └── properties/        # TanStack Query hooks
-│   ├── hooks/                 # useReducedMotionPref, useScrollThreshold
-│   ├── pages/                 # Home, Properties, PropertyDetails, Collections, CollectionDetails, Locations, About, Contact, SavedProperties, NotFound
-│   ├── services/              # FastAPI-ready api.js client layer
-│   ├── store/                 # Zustand persisted favourites, comparison, currency, unit, command search & toast store
-│   ├── styles/                # Tailwind v4 @theme tokens & custom Leaflet pin styles
-│   └── utils/                 # Multi-currency, sqm/sqft, and URL search-param formatters
-├── vercel.json
-└── package.json
-```
 
 ---
 
@@ -212,11 +182,4 @@ npm run build
 
 # Preview production bundle locally
 npm run preview
-```
-
-### FastAPI Integration
-All data access is routed through `src/services/api.js`. To connect a FastAPI backend without refactoring UI components, configure:
-
-```env
-VITE_API_BASE_URL=https://api.vimrollestate.com
 ```

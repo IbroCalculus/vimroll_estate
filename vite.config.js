@@ -5,6 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   build: {
+    chunkSizeWarningLimit: 700,
     rollupOptions: {
       output: {
         manualChunks: {
@@ -13,6 +14,7 @@ export default defineConfig({
           forms: ['react-hook-form', '@hookform/resolvers', 'zod'],
           state: ['zustand', '@tanstack/react-query'],
           maps: ['leaflet', 'react-leaflet'],
+          three: ['three'],
         },
       },
     },
